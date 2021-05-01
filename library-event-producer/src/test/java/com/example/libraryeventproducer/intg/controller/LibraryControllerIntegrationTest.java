@@ -45,7 +45,7 @@ public class LibraryControllerIntegrationTest {
 
     private Consumer<Integer, String> consumer;
 
-    private String TOPIC = "library-events";
+    private final String TOPIC = "library-events";
 
     @Autowired
     EmbeddedKafkaBroker embeddedKafkaBroker;
