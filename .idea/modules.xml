@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/library.iml" filepath="$PROJECT_DIR$/.idea/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library-event-producer/library-event-producer.iml" filepath="$PROJECT_DIR$/library-event-producer/library-event-producer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library-events-consumer/library-events-consumer.iml" filepath="$PROJECT_DIR$/library-events-consumer/library-events-consumer.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,42 @@
+spring:
+  profiles:
+    active: local
+---
+spring:
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      bootstrap-servers:  localhost:9092
+      properties:
+        ack: all
+        retries: 10
+    admin:
+      properties:
+        bootstrap-servers: localhost:9092
+    template:
+      default-topic: library-events
+  config:
+    activate:
+      on-profile: local
+---
+spring:
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      bootstrap-servers:  localhost:9092
+  config:
+    activate:
+      on-profile: dev
+---
+spring:
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      bootstrap-servers:  localhost:9092
+  config:
+    activate:
+      on-profile: prod
+---
