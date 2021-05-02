@@ -143,7 +143,6 @@ public class LibraryEventProducer {
         return new ProducerRecord<>(topic, null, key, value, recordHeaders);
     }
 
-
     private void handleSuccess(Integer key, String value, SendResult<Integer, String> result) {
         log.info("Message Sent Successfully for the key : {} and the value is {}, partition is {}", key, value, result.getRecordMetadata().partition());
     }
