@@ -2,11 +2,13 @@ package com.example.libraryeventsconsumer.intg.consumer;
 
 import com.example.libraryeventsconsumer.consumer.LibraryEventConsumer;
 import com.example.libraryeventsconsumer.model.LibraryEvent;
+import com.example.libraryeventsconsumer.model.LibraryEventType;
 import com.example.libraryeventsconsumer.repo.LibraryEventRepo;
 import com.example.libraryeventsconsumer.service.LibraryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -104,6 +106,55 @@ public class LibraryEventConsumerIntegrationTest {
             assert libraryEvent.getLibraryEventId() != null;
             assertEquals(1, libraryEvent.getBook().getBookId());
         });
+    }
+    
+
+    @Test
+    void publishUpdateLibraryEvent() throws ExecutionException, InterruptedException, JsonProcessingException {
+        setUpUpdateData();
+
+        //given
+        String update = "{\"libraryEventId\":1,\"book\":{\"bookId\":2,\"bookName\":\"Moby Dick\",\"bookAuthor\":\"John\"},\"libraryEventType\":\"UPDATE\"}";
+
+        // publish event synchronously
+        kafkaTemplate.sendDefault(update).get();
+
+
+        // as soon as the count goes from 1 it will release the thread
+        CountDownLatch latch = new CountDownLatch(1);
+
+        // Thread will be blocked for 3 seconds and then released
+        // will decrement latch count after 3 seconds
+        latch.await(3, TimeUnit.SECONDS);
+
+        //then
+        // verify comes from mockito
+        // will verify how many times this bean is called
+        verify(libraryEventConsumerSpy, times(2)).onMessage(isA(ConsumerRecord.class));
+        verify(libraryServiceSpy, times(2)).processLibraryEvent(isA(ConsumerRecord.class));
+
+        List<LibraryEvent> libraryEvents = libraryEventRepo.findAll();
+        assert libraryEvents.size() == 1;
+        libraryEvents.forEach(libraryEvent -> {
+            assert libraryEvent.getLibraryEventType() == LibraryEventType.UPDATE;
+            assert libraryEvent.getLibraryEventId() == 1;
+        });
+        
+    }
+
+    void setUpUpdateData() throws ExecutionException, InterruptedException {
+        //given
+        String json = "{\"libraryEventId\":null,\"book\":{\"bookId\":1,\"bookName\":\"Moby Dick\",\"bookAuthor\":\"John Doe\"},\"libraryEventType\":\"NEW\"}";
+
+        // publish event synchronously
+        kafkaTemplate.sendDefault(json).get();
+
+        // as soon as the count goes from 1 it will release the thread
+        CountDownLatch latch = new CountDownLatch(1);
+
+        // Thread will be blocked for 3 seconds and then released
+        // will decrement latch count after 3 seconds
+        latch.await(3, TimeUnit.SECONDS);
     }
 
 }

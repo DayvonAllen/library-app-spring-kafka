@@ -36,13 +36,13 @@ public class LibraryServiceImpl implements LibraryService {
             case NEW:
                 libraryEvent.getBook().setLibraryEvent(libraryEvent);
                 bookRepo.save(libraryEvent.getBook());
-                log.info("Process message and saved to the database : {}", libraryEvent.toString());
+                log.info("Process message and saved to the database : {}", libraryEvent);
                 break;
             case UPDATE:
                 libraryEvent.getBook().setLibraryEvent(libraryEvent);
                 validate(libraryEvent);
                 libraryEventRepo.save(libraryEvent);
-                log.info("Process message and updated to the database : {}", libraryEvent.toString());
+                log.info("Process message and updated to the database : {}", libraryEvent);
                 break;
             default:
                 log.info("invalid library event type");
