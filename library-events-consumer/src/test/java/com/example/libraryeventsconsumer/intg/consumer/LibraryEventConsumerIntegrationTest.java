@@ -90,9 +90,9 @@ public class LibraryEventConsumerIntegrationTest {
         // as soon as the count goes from 1 it will release the thread
         CountDownLatch latch = new CountDownLatch(1);
 
-        // Thread will be blocked for 3 seconds and then released
-        // will decrement latch count after 3 seconds
-        latch.await(3, TimeUnit.SECONDS);
+        // Thread will be blocked for 1 seconds and then released
+        // will decrement latch count after 1 seconds
+        latch.await(1, TimeUnit.SECONDS);
 
         //then
         // verify comes from mockito
